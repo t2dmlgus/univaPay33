@@ -17,14 +17,14 @@ public class PaypayServiceImpl implements PaypayService{
 
     public static void UnivapaySDK(){
 
-        AppJWTStrategy authStrategy = getAppJWTStrategy();
-
-        UnivapaySettings univapaySettings = new UnivapaySettings()
-                .withEndpoint(endpoint)
-                .withTimeoutSeconds(timeSeconds)
-                .attachOrigin(origin);
-
-        UnivapaySDK univapay = UnivapaySDK.create(authStrategy, univapaySettings);
+//        AppJWTStrategy authStrategy = getAppJWTStrategy();
+//
+//        UnivapaySettings univapaySettings = new UnivapaySettings()
+//                .withEndpoint(endpoint)
+//                .withTimeoutSeconds(timeSeconds)
+//                .attachOrigin(origin);
+//
+//        UnivapaySDK univapay = UnivapaySDK.create(authStrategy, univapaySettings);
     }
 
     @NotNull
