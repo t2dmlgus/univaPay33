@@ -17,14 +17,14 @@ public class PaypayServiceImpl implements PaypayService{
 
     public static void UnivapaySDK(){
 
-//        AppJWTStrategy authStrategy = getAppJWTStrategy();
-//
-//        UnivapaySettings univapaySettings = new UnivapaySettings()
-//                .withEndpoint(endpoint)
-//                .withTimeoutSeconds(timeSeconds)
-//                .attachOrigin(origin);
-//
-//        UnivapaySDK univapay = UnivapaySDK.create(authStrategy, univapaySettings);
+        AppJWTStrategy authStrategy = getAppJWTStrategy();
+
+        UnivapaySettings univapaySettings = new UnivapaySettings()
+                .withEndpoint(endpoint)
+                .withTimeoutSeconds(timeSeconds)
+                .attachOrigin(origin);
+
+        UnivapaySDK univapay = UnivapaySDK.create(authStrategy, univapaySettings);
     }
 
     @NotNull
@@ -51,7 +51,7 @@ public class PaypayServiceImpl implements PaypayService{
         // builder 를 통해 요청을 보냄
 
 
-        // gsdfdf
+        //
 
 
         // 가맹점 조회(토큰)
