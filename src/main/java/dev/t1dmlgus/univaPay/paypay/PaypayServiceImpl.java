@@ -2,20 +2,33 @@ package dev.t1dmlgus.univaPay.paypay;
 
 import com.univapay.sdk.UnivapaySDK;
 import com.univapay.sdk.builders.charge.ChargesBuilders;
+import com.univapay.sdk.models.common.MoneyLike;
+import com.univapay.sdk.models.common.TransactionTokenId;
 import com.univapay.sdk.models.common.auth.AppJWTStrategy;
+import com.univapay.sdk.models.errors.UnivapayException;
+import com.univapay.sdk.models.response.charge.Charge;
 import com.univapay.sdk.settings.UnivapaySettings;
+import com.univapay.sdk.types.AuthType;
 import dev.t1dmlgus.univaPay.util.TokenUtil;
-import org.jetbrains.annotations.NotNull;
+import sun.jvm.hotspot.debugger.bsd.aarch64.BsdAARCH64CFrame;
+
+import java.io.IOException;
+import java.math.BigInteger;
 
 public class PaypayServiceImpl implements PaypayService{
+
+    String appJWT = "";
+    String appJWTSecret = "";
 
     public final String endpoint = "https://api.univapay.com";
     public final Long timeSeconds = 900L;
     public final String origin = "";
     public TokenUtil tokenUtil;
 
+    public UnivapaySDK univapay;
 
-    public static void UnivapaySDK(){
+
+    public void UnivapaySDK(){
 
         AppJWTStrategy authStrategy = getAppJWTStrategy();
 
@@ -24,14 +37,11 @@ public class PaypayServiceImpl implements PaypayService{
                 .withTimeoutSeconds(timeSeconds)
                 .attachOrigin(origin);
 
+        AppJWTStrategy authStrategy = new AppJWTStrategy(appJWT, appJWTSecret);
+
         UnivapaySDK univapay = UnivapaySDK.create(authStrategy, univapaySettings);
     }
 
-    @NotNull
-    private static AppJWTStrategy getAppJWTStrategy() {
-        AppJWTStrategy authStrategy = new AppJWTStrategy();
-        return authStrategy;
-    }
 
     /**
      * @steve
@@ -39,12 +49,37 @@ public class PaypayServiceImpl implements PaypayService{
      *
      */
     @Override
-    public void requestQRtoUnivaPay() {
+    public void requestQRtoUnivaPay() throws UnivapayException, IOException {
 
-        // createToken
+        UnivapaySDK univapay = generateUnivaSDK();
 
 
-        // builder 를 만들고
+        // createTransactToken
+        univapay.createTransactionToken();
+
+        TransactionTokenId transactionTokenId = new TransactionTokenId("");
+
+
+        // 결제수단: online
+        String paymentMethod = "online";
+
+
+        String fakeTransactToken = "abc";
+
+        BigInteger amount = BigInteger.valueOf(2000);
+        String currency = "usd";
+
+        MoneyLike moneyLike2 = new MoneyLike(amount, currency);
+
+
+
+
+        ChargesBuilders.CreateChargeRequestBuilder charge = univapaySDK.createCharge(transactionTokenId, moneyLike2);
+
+
+        Charge dispatch = this.univapay.createCharge(transactionTokenId, moneyLike2)
+                .dispatch();
+
 
 
 
@@ -65,8 +100,25 @@ public class PaypayServiceImpl implements PaypayService{
 
     }
 
+    private UnivapaySDK generateUnivaSDK() {
+
+        // createSDK
+        AppJWTStrategy authStrategy = new AppJWTStrategy(appJWT, appJWTSecret);
+
+        UnivapaySettings univapaySettings = new UnivapaySettings()
+                .withEndpoint(endpoint)
+                .withTimeoutSeconds(timeSeconds)
+                .attachOrigin(origin);
+
+
+        return UnivapaySDK.create(authStrategy, univapaySettings);
+    }
+
     @Override
     public void refund() {
 
     }
 }
+
+
+
